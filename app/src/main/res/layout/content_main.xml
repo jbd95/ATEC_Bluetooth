@@ -10,214 +10,6 @@
     tools:showIn="@layout/app_bar_main">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/Connect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="148dp"
-            android:layout_marginStart="148dp"
-            android:layout_marginTop="231dp"
-            android:onClick="ConnectClick"
-            android:text="Connect"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/Disconnect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="148dp"
-            android:layout_marginStart="148dp"
-            android:layout_marginTop="8dp"
-            android:onClick="DisconnectClick"
-            android:text="Disconnect"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Connect" />
-
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/first_menu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
-
-        <Button
-            android:id="@+id/exercise1"
-            android:layout_width="111dp"
-            android:layout_height="103dp"
-            android:layout_marginStart="58dp"
-            android:layout_marginTop="34dp"
-            android:onClick="ExerciseClick"
-            android:text="exercise 1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/exercise2"
-            android:layout_width="111dp"
-            android:layout_height="103dp"
-            android:layout_marginEnd="58dp"
-            android:layout_marginTop="34dp"
-            android:onClick="ExerciseClick"
-            android:text="exercise 2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/exercise3"
-            android:layout_width="111dp"
-            android:layout_height="103dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="54dp"
-            android:onClick="ExerciseClick"
-            android:text="exercise 3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/exercise1" />
-
-        <Button
-            android:id="@+id/exercise4"
-            android:layout_width="111dp"
-            android:layout_height="103dp"
-            android:layout_marginEnd="56dp"
-            android:layout_marginTop="54dp"
-            android:onClick="ExerciseClick"
-            android:text="exercise 4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/exercise2" />
-
-        <Button
-            android:id="@+id/exercise5"
-            android:layout_width="111dp"
-            android:layout_height="103dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="54dp"
-            android:onClick="ExerciseClick"
-            android:text="exercise 5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/exercise3" />
-
-        <Button
-            android:id="@+id/exercise6"
-            android:layout_width="111dp"
-            android:layout_height="103dp"
-            android:layout_marginEnd="56dp"
-            android:layout_marginTop="54dp"
-            android:onClick="ExerciseClick"
-            android:text="exercise 6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/exercise4" />
-
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/sub_menu_1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
-
-        <Button
-            android:id="@+id/middle_1_1"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="40dp"
-            android:onClick="OptionClick"
-            android:tag="middle_1_1"
-            android:text="option 1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/middle_1_2"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="20dp"
-            android:onClick="OptionClick"
-            android:tag="middle_1_2"
-            android:text="option 2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/middle_1_1" />
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/sub_menu_2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
-
-        <Button
-            android:id="@+id/middle_2_1"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="40dp"
-            android:onClick="OptionClick"
-            android:tag="middle_2_1"
-            android:text="option 1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/middle_2_2"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="20dp"
-            android:onClick="OptionClick"
-            android:tag="middle_2_2"
-            android:text="option 2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/middle_2_1" />
-
-        <Button
-            android:id="@+id/middle_2_3"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="20dp"
-            android:onClick="OptionClick"
-            android:tag="middle_2_3"
-            android:text="option 3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/middle_2_2" />
-
-        <Button
-            android:id="@+id/middle_2_4"
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="20dp"
-            android:onClick="OptionClick"
-            android:tag="middle_2_4"
-            android:text="option 4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/middle_2_3" />
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
         android:id="@+id/final_menu_1_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -329,6 +121,270 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/device_name" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+    <!--<android.support.constraint.ConstraintLayout
+        android:id="@+id/sub_menu_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <Button
+            android:id="@+id/middle_1_1"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="40dp"
+            android:onClick="OptionClick"
+            android:tag="middle_1_1"
+            android:text="option 1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/middle_1_2"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="20dp"
+            android:onClick="OptionClick"
+            android:tag="middle_1_2"
+            android:text="option 2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/middle_1_1" />
+    </android.support.constraint.ConstraintLayout> -->
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/first_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <Button
+            android:id="@+id/exercise1"
+            android:layout_width="111dp"
+            android:layout_height="103dp"
+            android:layout_marginStart="58dp"
+            android:layout_marginTop="34dp"
+            android:onClick="ExerciseClick"
+            android:text="exercise 1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/exercise2"
+            android:layout_width="111dp"
+            android:layout_height="103dp"
+            android:layout_marginEnd="58dp"
+            android:layout_marginTop="34dp"
+            android:onClick="ExerciseClick"
+            android:text="exercise 2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/exercise3"
+            android:layout_width="111dp"
+            android:layout_height="103dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="54dp"
+            android:onClick="ExerciseClick"
+            android:text="exercise 3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise1" />
+
+        <Button
+            android:id="@+id/exercise4"
+            android:layout_width="111dp"
+            android:layout_height="103dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginTop="54dp"
+            android:onClick="ExerciseClick"
+            android:text="exercise 4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise2" />
+
+        <Button
+            android:id="@+id/exercise5"
+            android:layout_width="111dp"
+            android:layout_height="103dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="54dp"
+            android:onClick="ExerciseClick"
+            android:text="exercise 5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise3" />
+
+        <Button
+            android:id="@+id/exercise6"
+            android:layout_width="111dp"
+            android:layout_height="103dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginTop="54dp"
+            android:onClick="ExerciseClick"
+            android:text="exercise 6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exercise4" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/start_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <Button
+            android:id="@+id/start_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="122dp"
+            android:layout_marginStart="122dp"
+            android:layout_marginTop="152dp"
+            android:onClick="StartTest"
+            android:text="Start New Test"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/continue_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="94dp"
+            android:layout_marginStart="94dp"
+            android:layout_marginTop="16dp"
+            android:onClick="ContinueTest"
+            android:text="Continue Current Test"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start_test" />
+
+        <Button
+            android:id="@+id/end_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="115dp"
+            android:layout_marginStart="115dp"
+            android:layout_marginTop="16dp"
+            android:onClick="EndTest"
+            android:text="End Current Test"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/continue_test" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/sub_menu_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <Button
+            android:id="@+id/middle_2_1"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="40dp"
+            android:onClick="OptionClick"
+            android:tag="middle_2_1"
+            android:text="option 1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/middle_2_2"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="20dp"
+            android:onClick="OptionClick"
+            android:tag="middle_2_2"
+            android:text="option 2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/middle_2_1" />
+
+        <Button
+            android:id="@+id/middle_2_3"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="20dp"
+            android:onClick="OptionClick"
+            android:tag="middle_2_3"
+            android:text="option 3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/middle_2_2" />
+
+        <Button
+            android:id="@+id/middle_2_4"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="20dp"
+            android:onClick="OptionClick"
+            android:tag="middle_2_4"
+            android:text="option 4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/middle_2_3" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/Connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="148dp"
+            android:layout_marginStart="148dp"
+            android:layout_marginTop="231dp"
+            android:onClick="ConnectClick"
+            android:text="Connect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/Disconnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="148dp"
+            android:layout_marginStart="148dp"
+            android:layout_marginTop="8dp"
+            android:onClick="DisconnectClick"
+            android:text="Disconnect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Connect" />
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

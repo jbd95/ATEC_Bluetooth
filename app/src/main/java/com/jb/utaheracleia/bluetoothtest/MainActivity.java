@@ -42,16 +42,17 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    //Set the name of the bluetooth device that android will connect to
-    //This device has to be paired with the android device before this program will work
+
+    /* CHANGE THE VALUES IN THIS SECTION BELOW TO CONNECT TO A DIFFERENT COMUPUTEr
+    Set the name of the bluetooth device that android will connect to
+    This device has to be paired with the android device before this program will work*/
     public String DEVICE_NAME = "DESKTOP-9DF7A2";
     public String SERVER_UUID = "7A51FDC2-FDDF-4c9b-AFFC-98BCD91BF93B";
 
+    /*CHANGE THESE VALUES TO EDIT THE SIZE OF THE MENUS*/
     final int EXERCISE_COUNT = 8;
     final int ACTIVITY_TYPE_COUNT = 3;
     int[] exercise_options = new int[EXERCISE_COUNT];
-
-
     String[] main_menu_button_text = new String[EXERCISE_COUNT];
 
 
@@ -281,7 +282,8 @@ public class MainActivity extends AppCompatActivity
         JsonConverter converter = new JsonConverter();
 
         AtecActivity temp_activity = new AtecActivity();
-        temp_activity.TaskId = (Integer.parseInt(seperated_name[1]) * 10) + Integer.parseInt(seperated_name[2]);
+        //temp_activity.TaskId = (Integer.parseInt(seperated_name[1]) * 10) + Integer.parseInt(seperated_name[2]);
+        temp_activity.TaskId = ((Integer.parseInt(seperated_name[1]) * 100) + ((Integer.parseInt(seperated_name[2]) - 1) * 10) + (Integer.parseInt(seperated_name[3]) - 1));
 
         for(ActivityType current_type : ActivityType.values())
         {

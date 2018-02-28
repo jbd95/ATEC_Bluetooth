@@ -46,11 +46,11 @@ public class MainActivity extends AppCompatActivity
     /* CHANGE THE VALUES IN THIS SECTION BELOW TO CONNECT TO A DIFFERENT COMUPUTEr
     Set the name of the bluetooth device that android will connect to
     This device has to be paired with the android device before this program will work*/
-    public String DEVICE_NAME = "DESKTOP-9DF7A2";
+    public String DEVICE_NAME = "DESKTOP-OM1D1UH";
     public String SERVER_UUID = "7A51FDC2-FDDF-4c9b-AFFC-98BCD91BF93B";
 
     /*CHANGE THESE VALUES TO EDIT THE SIZE OF THE MENUS*/
-    final int EXERCISE_COUNT = 8;
+    final int EXERCISE_COUNT = 10;
     final int ACTIVITY_TYPE_COUNT = 3;
     int[] exercise_options = new int[EXERCISE_COUNT];
     String[] main_menu_button_text = new String[EXERCISE_COUNT];
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     public View Current_Menu_Showing;
     public ArrayList<View> Last_Visited = new ArrayList<>();
     Map<String, String> exercise_names = new HashMap<String, String>();
+    Map<String, String> foot_options = new HashMap<String, String>();
 
 
     @Override
@@ -80,60 +81,92 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        exercise_options[0] = 6;
-        exercise_options[1] = 2;
-        exercise_options[2] = 2;
-        exercise_options[3] = 5;
-        exercise_options[4] = 2;
-        exercise_options[5] = 3;
-        exercise_options[6] = 1;
-        exercise_options[7] = 6;
+        exercise_options[1] = 6;
+        exercise_options[2] = 3;
+        exercise_options[3] = 2;
+        exercise_options[4] = 8;
+        exercise_options[5] = 2;
+        exercise_options[6] = 4;
+        exercise_options[7] = 2;
+        exercise_options[8] = 12;
 
-        main_menu_button_text[0] = "Gross Motor Gait and Balance";
-        main_menu_button_text[1] = "Synchronous Movements";
-        main_menu_button_text[2] = "Coordination and Inhibition";
-        main_menu_button_text[3] = "Ball Pass with Red Light/Green Light";
-        main_menu_button_text[4] = "Visual Response Inhibition";
-        main_menu_button_text[5] = "Cross Body Game";
-        main_menu_button_text[6] = "Finger-Nose Coordination";
-        main_menu_button_text[7] = "Rapid Sequence Movements";
+        main_menu_button_text[0] = "Introduction";
+        main_menu_button_text[1] = "Gross Motor Gait and Balance";
+        main_menu_button_text[2] = "Synchronous Movements";
+        main_menu_button_text[3] = "Coordination and Inhibition - Beat";
+        main_menu_button_text[4] = "LightsCoordination and Inhibition - ";
+        main_menu_button_text[5] = "Visual Response Inhibition";
+        main_menu_button_text[6] = "Cross Body Game";
+        main_menu_button_text[7] = "Finger-Nose Coordination";
+        main_menu_button_text[8] = "Rapid Sequential Movements";
+        main_menu_button_text[9] = "Goodbye";
 
-        exercise_names.put("1_1", "Natural Walk");
-        exercise_names.put("1_2", "Gait on Toes");
-        exercise_names.put("1_3", "Tandem Gait");
-        exercise_names.put("1_4", "Eyes Closed Outstretched Hands");
-        exercise_names.put("1_5", "Stand on Left Foot");
-        exercise_names.put("1_6", "Stand on Right Foot");
+        exercise_names.put("2_1", "Walk Naturally");
+        exercise_names.put("2_2", "Sneaky Toes");
+        exercise_names.put("2_3", "Heat to Toe Walk");
+        exercise_names.put("2_4", "Spell Caster");
+        exercise_names.put("2_5", "Open Right Foot Wonder");
+        exercise_names.put("2_6", "Open Left Foot Wonder");
 
-        exercise_names.put("2_1", "March Slow");
-        exercise_names.put("2_2", "March Fast");
+        exercise_names.put("3_1", "March to the Intro");
+        exercise_names.put("3_2", "March to the Beat Slow");
+        exercise_names.put("3_3", "March to the Beat Fast");
 
-        exercise_names.put("3_1", "Bag Pass Slow");
-        exercise_names.put("3_2", "Bag Pass Fast");
+        exercise_names.put("4_1", "Bag Pass Slow");
+        exercise_names.put("4_2", "Bag Pass Fast");
 
-        exercise_names.put("4_1", "Red/Green Light Slow");
-        exercise_names.put("4_2", "Red/Green Light Fast");
-        exercise_names.put("4_3", "Red/Green/Yellow Light Slow");
-        exercise_names.put("4_4", "Red/Green/Yellow Light Fast");
-        exercise_names.put("4_5", "Red/Green/Yellow Light Visual Slow");
+        exercise_names.put("5_1", "Red/Green Light Slow");
+        exercise_names.put("5_2", "Red/Green Light Fast");
+        exercise_names.put("5_3", "Red/Green/Yellow Light Slow");
+        exercise_names.put("5_4", "Red/Green/Yellow Light Fast");
+        exercise_names.put("5_5", "Traffic Light Slow");
+        exercise_names.put("5_6", "Traffic Light Fast");
+        exercise_names.put("5_7", "Traffic Light Yellow Slow");
+        exercise_names.put("5_8", "Traffic Light Yellow Fast");
 
-        exercise_names.put("5_1", "Sailor Slow");
-        exercise_names.put("5_2", "Sailor Fast");
+        exercise_names.put("6_1", "Sailor Step Slow");
+        exercise_names.put("6_2", "Sailor Step Fast");
 
-        exercise_names.put("6_1", "Cross Body Ears - Knees");
-        exercise_names.put("6_2", "Cross Body Shoulders = Hips");
-        exercise_names.put("6_3", "Combined Reverse Actions");
+        exercise_names.put("7_1", "Cross Your Body");
+        exercise_names.put("7_2", "Opposite - Ears and Knees");
+        exercise_names.put("7_3", "Opposite - Hips and Shoulders");
+        exercise_names.put("7_4", "Opposite - Cross Your Body");
 
-        exercise_names.put("7_1", "Finger-Nose Coordination");
+        exercise_names.put("8_1", "Stretch and Touch Game");
+        exercise_names.put("8_2", "Strecth and Touch - Both Hands");
 
-        exercise_names.put("8_1", "Foot Tap");
-        exercise_names.put("8_2", "Foot-Heel-Toe Tap");
-        exercise_names.put("8_3", "Hand Pat");
-        exercise_names.put("8_4", "Hand Pronate/Supinate");
-        exercise_names.put("8_5", "Finger Tap");
-        exercise_names.put("8_6", "Appose Finger Succession");
+        exercise_names.put("9_1", "Foot Tap Right");
+        exercise_names.put("9_2", "Foot Tap Left");
+        exercise_names.put("9_3", "Heel Toe Right");
+        exercise_names.put("9_4", "Heel Toe Left");
+        exercise_names.put("9_5", "Hand Pat Right");
+        exercise_names.put("9_6", "Hand Pat Left");
+        exercise_names.put("9_7", "Hand Flip-Flop Right");
+        exercise_names.put("9_8", "Hand Flip-Flop Left");
+        exercise_names.put("9_9", "Finger Tap Right");
+        exercise_names.put("9_10", "Finger Tap Left");
+        exercise_names.put("9_11", "Fingers In Order Right");
+        exercise_names.put("9_12", "Fingers in Order Left");
+
+
+        foot_options.put("2_5", Foot.Right.ordinal() + "");
+        foot_options.put("2_6", Foot.Left.ordinal() + "");
+
+        foot_options.put("9_1", Foot.Right.ordinal() + "");
+        foot_options.put("9_2", Foot.Left.ordinal() + "");
+        foot_options.put("9_3", Foot.Right.ordinal() + "");
+        foot_options.put("9_4", Foot.Left.ordinal() + "");
+        foot_options.put("9_5", Foot.Right.ordinal() + "");
+        foot_options.put("9_6", Foot.Left.ordinal() + "");
+        foot_options.put("9_7", Foot.Right.ordinal() + "");
+        foot_options.put("9_8", Foot.Left.ordinal() + "");
+        foot_options.put("9_9", Foot.Right.ordinal() + "");
+        foot_options.put("9_10", Foot.Left.ordinal() + "");
+        foot_options.put("9_11", Foot.Right.ordinal() + "");
+        foot_options.put("9_12", Foot.Left.ordinal() + "");
 
         CreateMainMenu(EXERCISE_COUNT, (ConstraintLayout)findViewById(R.id.main_stack));
+
 
         HideAllMenus();
         SetVisible(findViewById(R.id.main));
@@ -154,6 +187,13 @@ public class MainActivity extends AppCompatActivity
         bluetooth.cancelDiscovery();
 
 
+    }
+
+    enum Foot
+    {
+        None,
+        Right,
+        Left
     }
 
     @Override
@@ -283,7 +323,16 @@ public class MainActivity extends AppCompatActivity
 
         AtecActivity temp_activity = new AtecActivity();
         //temp_activity.TaskId = (Integer.parseInt(seperated_name[1]) * 10) + Integer.parseInt(seperated_name[2]);
-        temp_activity.TaskId = ((Integer.parseInt(seperated_name[1]) * 100) + ((Integer.parseInt(seperated_name[2]) - 1) * 10) + (Integer.parseInt(seperated_name[3]) - 1));
+        temp_activity.TaskId = (((Integer.parseInt(seperated_name[1]) - 1) * 100) + ((Integer.parseInt(seperated_name[2]) - 1) * 10));
+
+        if((foot_options.get(seperated_name[1] + "_" + seperated_name[2]) != null))
+        {
+                if(foot_options.get(seperated_name[1] + "_" + seperated_name[2]).equalsIgnoreCase(Foot.Right.ordinal() + ""))
+                    temp_activity.TaskId += Integer.parseInt(foot_options.get(seperated_name[1] + "_" + seperated_name[2]));
+                else
+                    temp_activity.TaskId += Integer.parseInt(foot_options.get(seperated_name[1] + "_" + seperated_name[2])) - (((Integer.parseInt(seperated_name[2]) - 1) * 10));
+        }
+
 
         for(ActivityType current_type : ActivityType.values())
         {
@@ -411,6 +460,7 @@ public class MainActivity extends AppCompatActivity
 
 
             layout.addView(new_button);
+
 
 
             new_button.setOnClickListener(new View.OnClickListener() {

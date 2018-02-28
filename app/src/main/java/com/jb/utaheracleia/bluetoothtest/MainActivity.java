@@ -149,21 +149,21 @@ public class MainActivity extends AppCompatActivity
         exercise_names.put("9_12", "Fingers in Order Left");
 
 
-        foot_options.put("2_5", Foot.Right.ordinal() + "");
-        foot_options.put("2_6", Foot.Left.ordinal() + "");
+        foot_options.put("2_5", "141");
+        foot_options.put("2_6", "142");
 
-        foot_options.put("9_1", Foot.Right.ordinal() + "");
-        foot_options.put("9_2", Foot.Left.ordinal() + "");
-        foot_options.put("9_3", Foot.Right.ordinal() + "");
-        foot_options.put("9_4", Foot.Left.ordinal() + "");
-        foot_options.put("9_5", Foot.Right.ordinal() + "");
-        foot_options.put("9_6", Foot.Left.ordinal() + "");
-        foot_options.put("9_7", Foot.Right.ordinal() + "");
-        foot_options.put("9_8", Foot.Left.ordinal() + "");
-        foot_options.put("9_9", Foot.Right.ordinal() + "");
-        foot_options.put("9_10", Foot.Left.ordinal() + "");
-        foot_options.put("9_11", Foot.Right.ordinal() + "");
-        foot_options.put("9_12", Foot.Left.ordinal() + "");
+        foot_options.put("9_1", "801");
+        foot_options.put("9_2", "802");
+        foot_options.put("9_3", "811");
+        foot_options.put("9_4", "812");
+        foot_options.put("9_5", "821");
+        foot_options.put("9_6", "822");
+        foot_options.put("9_7", "831");
+        foot_options.put("9_8", "832");
+        foot_options.put("9_9", "841");
+        foot_options.put("9_10", "842");
+        foot_options.put("9_11", "851");
+        foot_options.put("9_12", "852");
 
         CreateMainMenu(EXERCISE_COUNT, (ConstraintLayout)findViewById(R.id.main_stack));
 
@@ -327,10 +327,7 @@ public class MainActivity extends AppCompatActivity
 
         if((foot_options.get(seperated_name[1] + "_" + seperated_name[2]) != null))
         {
-                if(foot_options.get(seperated_name[1] + "_" + seperated_name[2]).equalsIgnoreCase(Foot.Right.ordinal() + ""))
-                    temp_activity.TaskId += Integer.parseInt(foot_options.get(seperated_name[1] + "_" + seperated_name[2]));
-                else
-                    temp_activity.TaskId += Integer.parseInt(foot_options.get(seperated_name[1] + "_" + seperated_name[2])) - (((Integer.parseInt(seperated_name[2]) - 1) * 10));
+                temp_activity.TaskId = Integer.parseInt(foot_options.get(seperated_name[1] + "_" + seperated_name[2]));
         }
 
 

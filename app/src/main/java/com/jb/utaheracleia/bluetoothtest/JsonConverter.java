@@ -16,7 +16,7 @@ public class JsonConverter extends MainActivity
 {
     void SetDate(AtecActivity activity)
     {
-        activity.TimeStarted = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(new Date());
+        activity.TimeStarted = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss:SSS", Locale.getDefault()).format(new Date());
     }
 
     String GetJsonString(AtecActivity activity) {

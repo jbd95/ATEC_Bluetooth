@@ -316,6 +316,7 @@
             android:layout_marginEnd="22dp"
             android:layout_marginStart="22dp"
             android:layout_marginTop="20dp"
+            android:background="?android:attr/statusBarColor"
             android:onClick="OptionClick"
             android:tag="middle_2_2"
             android:text="option 2"
@@ -356,48 +357,42 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/Connect"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="148dp"
             android:layout_marginStart="148dp"
             android:layout_marginTop="231dp"
+            android:backgroundTint="@color/colorAccent"
             android:onClick="ConnectClick"
             android:text="Connect"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/Disconnect"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="148dp"
             android:layout_marginStart="148dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="@color/colorAccent"
             android:onClick="DisconnectClick"
             android:text="Disconnect"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Connect" />
 
     </android.support.constraint.ConstraintLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/status_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"
-        android:clickable="true"
-        app:backgroundTint="@android:color/holo_red_dark"
-        app:layout_constraintBottom_toBottomOf="@id/main_stack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
 
 </android.support.constraint.ConstraintLayout>

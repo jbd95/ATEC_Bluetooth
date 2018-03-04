@@ -8,16 +8,23 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.annotation.StyleRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.constraint.solver.widgets.Rectangle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Layout;
 import android.util.Log;
 import android.util.Xml;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,9 +37,11 @@ import android.view.MenuItem;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -64,16 +73,8 @@ public class MainActivity extends AppCompatActivity
     public ArrayList<View> Last_Visited = new ArrayList<>();
     Map<String, String> exercise_names = new HashMap<String, String>();
     Map<String, String> foot_options = new HashMap<String, String>();
-    FloatingActionButton status_indicator;
-    String not_recording_icon = "ic_menu_close_clear_cancel";
-    String recording_icon = "ic_media_play";
 
-    int not_recording_color = Color.RED;
-    int recording_color = Color.GREEN;
-    int category_color = Color.BLUE;
-    int exercise_color = Color.YELLOW;
-    int introduction_color = Color.CYAN;
-    int practice_color = Color.MAGENTA;
+    ColorStateList app_bar_color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,11 +188,11 @@ public class MainActivity extends AppCompatActivity
         foot_options.put("9_11", "851");
         foot_options.put("9_12", "852");
 
-        //set the id of the status indicator
-        status_indicator = findViewById(R.id.status_indicator);
+        app_bar_color = findViewById(R.id.toolbar).getBackgroundTintList();
 
         /* create the user interface*/
         CreateMainMenu(EXERCISE_COUNT, (ConstraintLayout)findViewById(R.id.main_stack));
+
 
 
         HideAllMenus();
@@ -285,7 +286,6 @@ public class MainActivity extends AppCompatActivity
     /*function that gets called when the connect button is clicked*/
     public void ConnectClick(View window) throws InterruptedException{
 
-        status_indicator.setBackgroundTintList(ColorStateList.valueOf(Color.DKGRAY));
         //connect bluetooth if there is no connection yet
         if (bluetoothConnection == null) {
             ShowToast("Connecting....");
@@ -298,18 +298,17 @@ public class MainActivity extends AppCompatActivity
             //if the bluetooth connection was successful then show the next menu
             if (bluetoothConnection.sender != null) {
                 ShowToast("Connected....");
-                status_indicator.setBackgroundTintList(ColorStateList.valueOf(recording_color));
+
                 HideAllMenus();
                 SetVisible(findViewById(R.id.start_activity));
             } else {
-                status_indicator.setBackgroundTintList(ColorStateList.valueOf(not_recording_color));
+
                 ShowToast("Not connected....");
             }
             //bluetooth is already connected try and go to the next menu
         } else {
             if (bluetoothConnection.sender != null) {
                 ShowToast("Connected....");
-                status_indicator.setBackgroundTintList(ColorStateList.valueOf(recording_color));
                 HideAllMenus();
                 SetVisible(findViewById(R.id.start_activity));
             } else {
@@ -326,7 +325,6 @@ public class MainActivity extends AppCompatActivity
             bluetoothConnection.cancel();
         }
         bluetoothConnection = null;
-        status_indicator.setBackgroundTintList(ColorStateList.valueOf(not_recording_color));
         ShowToast("Disconnected....");
     }
 
@@ -370,19 +368,20 @@ public class MainActivity extends AppCompatActivity
 
         if((Integer.parseInt(seperated_name[3]) - 1) == ActivityType.Test.ordinal())
         {
-            status_indicator.setBackgroundTintList(ColorStateList.valueOf(recording_color));
+            ChangeAppBarColor(window.getBackgroundTintList());
+
         }
         else if((Integer.parseInt(seperated_name[3]) - 1) == ActivityType.Stop.ordinal())
         {
-            status_indicator.setBackgroundTintList(ColorStateList.valueOf(not_recording_color));
+            ChangeAppBarColor(window.getBackgroundTintList());
         }
         else if((Integer.parseInt(seperated_name[3]) - 1) == ActivityType.Introduction.ordinal())
         {
-            status_indicator.setBackgroundTintList(ColorStateList.valueOf(introduction_color));
+            ChangeAppBarColor(window.getBackgroundTintList());
         }
         else
         {
-            status_indicator.setBackgroundTintList(ColorStateList.valueOf(practice_color));
+            ChangeAppBarColor(window.getBackgroundTintList());
         }
         converter.SetDate(temp_activity);
 
@@ -392,10 +391,10 @@ public class MainActivity extends AppCompatActivity
         {
             command = AtecCommand.EndActivity;
 
-            LinearLayout parent_window = ((LinearLayout)window.getParent());
+            ConstraintLayout parent_window = ((ConstraintLayout)window.getParent());
 
            for(int i = 0; i < parent_window.getChildCount(); i++) {
-                if (parent_window.getChildAt(i).getClass().getName().equalsIgnoreCase("android.widget.button")) {
+                if (parent_window.getChildAt(i).getClass().getName().equalsIgnoreCase("android.support.v7.widget.AppCompatButton")) {
                     parent_window.getChildAt(i).setEnabled(true);
                 }
             }
@@ -444,7 +443,6 @@ public class MainActivity extends AppCompatActivity
 
         } else {
             ShowToast("Not connnected....");
-            status_indicator.setBackgroundTintList(ColorStateList.valueOf(not_recording_color));
         }
 
         HideAllMenus();
@@ -457,7 +455,6 @@ public class MainActivity extends AppCompatActivity
                 {
                     HideAllMenus();
                     SetVisible(parent.getChildAt(i));
-                    status_indicator.setBackgroundTintList(ColorStateList.valueOf(category_color));
                 }
             }
         }
@@ -480,7 +477,6 @@ public class MainActivity extends AppCompatActivity
                 {
                     HideAllMenus();
                     SetVisible(parent.getChildAt(i));
-                    status_indicator.setBackgroundTintList(ColorStateList.valueOf(category_color));
                 }
             }
         }
@@ -495,13 +491,13 @@ public class MainActivity extends AppCompatActivity
         if (bluetoothConnection.sender != null) {
 
             bluetoothConnection.run("[" + AtecCommand.EndTest.ordinal() + "]");
-            status_indicator.setBackgroundTintList(ColorStateList.valueOf(recording_color));
         } else {
             ShowToast("Not connnected....");
         }
     }
 
     public void GoBack() {
+        ChangeAppBarColor(app_bar_color);
         View before_changed = Current_Menu_Showing;
         HideAllMenus();
         if (Last_Visited.size() > 0) {
@@ -594,12 +590,7 @@ public class MainActivity extends AppCompatActivity
             Button new_button = new Button(this);
             new_button.setText(exercise_names.get(index + "_" + i));
             new_button.setTag("middle_" + index + "_" + i);
-
-
-
-
-
-
+            
             new_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     OptionClick(v);
@@ -632,7 +623,6 @@ public class MainActivity extends AppCompatActivity
                 {
                     HideAllMenus();
                     SetVisible(parent.getChildAt(i));
-                    status_indicator.setBackgroundTintList(ColorStateList.valueOf(exercise_color));
                 }
             }
         }
@@ -651,13 +641,14 @@ public class MainActivity extends AppCompatActivity
             ConstraintLayout parent = ((ConstraintLayout) findViewById(R.id.main_stack));
 
             for (int i = 0; i < parent.getChildCount(); i++) {
-                if(parent.getChildAt(i).getClass().getName().equalsIgnoreCase("android.widget.linearlayout"))
+
+                if(parent.getChildAt(i).getClass().getName().equalsIgnoreCase("android.support.constraint.ConstraintLayout"))
                 {
-                    if(((LinearLayout)parent.getChildAt(i)).getTag().toString().equalsIgnoreCase(menu_name))
-                    {
-                        HideAllMenus();
-                        SetVisible(parent.getChildAt(i));
-                        status_indicator.setBackgroundTintList(ColorStateList.valueOf(not_recording_color));
+                    if(parent.getChildAt(i).getTag() != null) {
+                        if ((parent.getChildAt(i)).getTag().toString().equalsIgnoreCase(menu_name)) {
+                            HideAllMenus();
+                            SetVisible(parent.getChildAt(i));
+                        }
                     }
                 }
             }
@@ -668,61 +659,40 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void CreateFinalMenu(int num_options, ConstraintLayout parent_layout, int upper_index, int middle_index)
     {
-        LinearLayout layout = new LinearLayout(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.final_menu_template, null);
 
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setVerticalGravity(Gravity.CENTER);
+        view.setTag("final_menu_" + upper_index + "_" + middle_index);
 
-
-        for(int i = 1; i <= num_options; i++) {
-
-
-            Button new_button = new Button(this);
-
-            for(ActivityType current_type : ActivityType.values())
-            {
-                if(current_type.ordinal() == (i-1))
-                {
-                    new_button.setText(current_type.toString());
-                }
-            }
+        ((TextView)view.findViewById(R.id.exercise_label)).setText(exercise_names.get(upper_index + "_" + middle_index));
+        view.findViewById(R.id.intro).setTag("final_" + upper_index + "_" + middle_index + "_1");
+        view.findViewById(R.id.practice).setTag("final_" + upper_index + "_" + middle_index + "_2");
+        view.findViewById(R.id.test).setTag("final_" + upper_index + "_" + middle_index + "_3");
+        view.findViewById(R.id.stop).setTag("final_" + upper_index + "_" + middle_index + "_4");
 
 
-            new_button.setTag("final_" + upper_index + "_" + middle_index + "_" + i);
+        parent_layout.addView(view);
 
 
-            new_button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    SenderClick(v);
-                }
-            });
+
+       ConstraintSet set = new ConstraintSet();
+       set.clone(parent_layout);
+       set.centerHorizontally(view.getId(), parent_layout.getId());
+       set.applyTo(parent_layout);
 
 
-            layout.addView(new_button);
-        }
+        SetInvisible(view);
+    }
 
-        layout.setTag("final_menu_" + upper_index + "_" + middle_index);
-        parent_layout.addView(layout);
+    public void ChangeAppBarColor(ColorStateList color)
+    {
+        findViewById(R.id.toolbar).setBackgroundTintList(color);
 
-        SetInvisible(layout);
     }
 
     public void SetVisible(View view) {
-
-        if(view.getId() == R.id.main)
-        {
-            if(bluetoothConnection == null)
-            {
-                status_indicator.setBackgroundTintList(ColorStateList.valueOf(not_recording_color));
-            }
-            else
-            {
-                status_indicator.setBackgroundTintList(ColorStateList.valueOf(recording_color));
-            }
-        }
-
         view.setVisibility(View.VISIBLE);
         Last_Visited.add(view);
         Current_Menu_Showing = view;

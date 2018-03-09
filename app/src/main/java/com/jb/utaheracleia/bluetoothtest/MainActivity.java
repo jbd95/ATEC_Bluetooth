@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -38,18 +39,22 @@ import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity
     /* CHANGE THE VALUES IN THIS SECTION BELOW TO CONNECT TO A DIFFERENT COMUPUTEr
     Set the name of the bluetooth device that android will connect to
     This device has to be paired with the android device before this program will work*/
-    public String DEVICE_NAME = "DESKTOP-9DF7A2";
+    public ArrayList<String> COMPUTER_NAMES = new ArrayList<>();
     public String SERVER_UUID = "7A51FDC2-FDDF-4c9b-AFFC-98BCD91BF93B";
 
     /*CHANGE THESE VALUES TO EDIT THE SIZE OF THE MENUS*/
@@ -74,7 +79,12 @@ public class MainActivity extends AppCompatActivity
     Map<String, String> exercise_names = new HashMap<String, String>();
     Map<String, String> foot_options = new HashMap<String, String>();
 
+    public ColorStateList SUCCESS_COLOR = ColorStateList.valueOf(Color.GREEN);
+    public ColorStateList FAIL_COLOR = ColorStateList.valueOf(Color.RED);
+
     ColorStateList app_bar_color;
+
+    ManageConnections BluetoothConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +198,9 @@ public class MainActivity extends AppCompatActivity
         foot_options.put("9_11", "851");
         foot_options.put("9_12", "852");
 
+        COMPUTER_NAMES.add("DESKTOP-S9K0QPK");
+        COMPUTER_NAMES.add("DESKTOP-9DF7A2");
+
         app_bar_color = findViewById(R.id.toolbar).getBackgroundTintList();
 
         /* create the user interface*/
@@ -199,6 +212,7 @@ public class MainActivity extends AppCompatActivity
 
         /*show the first menu that allows the user to connect to the computer via bluetooth*/
         SetVisible(findViewById(R.id.main));
+        SetVisible(findViewById(R.id.bluetooth_indicator));
 
         /*check to make sure that the device has a bluetooth adapter*/
         bluetooth = BluetoothAdapter.getDefaultAdapter();
@@ -216,6 +230,13 @@ public class MainActivity extends AppCompatActivity
         /*bluetooth discovery drains battery and isn't necessary for the connection*/
         bluetooth.cancelDiscovery();
 
+        ArrayList<View> button_indicators = new ArrayList<>();
+        button_indicators.add(findViewById(R.id.connection_one));
+        button_indicators.add(findViewById(R.id.connection_two));
+        BluetoothConnector = new ManageConnections(COMPUTER_NAMES, button_indicators, bluetooth, SERVER_UUID);
+
+        Thread t = new Thread(BluetoothConnector);
+        t.start();
 
     }
 
@@ -280,14 +301,91 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /*create the bluetooth thread to connect to the pc*/
-    BluetoothThread bluetoothConnection = null;
+    private boolean IsConnected(BluetoothThread bluetooth_thread)
+    {
+        if(bluetooth_thread == null) {
+            return false;
+        }
+
+        if(bluetooth_thread.IsConnected())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean IsConnected(ArrayList<BluetoothThread> threads)
+    {
+        for(BluetoothThread current : threads)
+        {
+            if(!IsConnected(current))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean ConnectIfNecessary(ArrayList<BluetoothThread> threads)
+    {
+        for(int i = 0; i < threads.size(); i++)
+        {
+            if (!IsConnected(threads.get(i))) {
+                threads.set(i, new BluetoothThread(bluetooth, COMPUTER_NAMES.get(i), SERVER_UUID));
+                threads.get(i).Send("");
+            }
+        }
+        if(IsConnected(threads))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void SetupConnections()
+    {
+        for(int i = 0; i < COMPUTER_NAMES.size(); i++){
+            BluetoothThread bluetooth_thread = new BluetoothThread(bluetooth, COMPUTER_NAMES.get(i), SERVER_UUID);
+            BluetoothConnector.BLUETOOTH_CONNECTIONS.add(bluetooth_thread);
+        }
+    }
+
+    private boolean SendMessage(ArrayList<BluetoothThread> threads, String message)
+    {
+        for(int i = 0; i < threads.size(); i++)
+        {
+            if(IsConnected(threads.get(i)))
+            {
+                threads.get(i).Send(message);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean DisconnectConnections(ArrayList<BluetoothThread> threads)
+    {
+        for(int i = 0; i < threads.size(); i++)
+        {
+            threads.get(i).cancel();
+            threads.set(i, null);
+        }
+        if(!IsConnected(threads))
+        {
+            return true;
+        }
+        return false;
+    }
 
     /*function that gets called when the connect button is clicked*/
     public void ConnectClick(View window) throws InterruptedException{
 
         //connect bluetooth if there is no connection yet
-        if (bluetoothConnection == null) {
+        /*if (bluetoothConnection == null) {
             ShowToast("Connecting....");
 
             //start a new bluetooth thread
@@ -315,16 +413,50 @@ public class MainActivity extends AppCompatActivity
                 bluetoothConnection = null;
                 ShowToast("Not connected....");
             }
+        }*/
+
+        /*if(bluetoothConnection.size() == 0)
+        {
+            SetupConnections();
+            ShowToast("setting up connections");
+        }
+
+       ConnectIfNecessary(bluetoothConnection);
+
+        if(IsConnected(bluetoothConnection))
+        {
+            ShowToast("Connected....");
+            HideAllMenus();
+            SetVisible(findViewById(R.id.start_activity));
+        }
+        else
+        {
+            ShowToast("Not connected...");
+        }*/
+        for(int i = 0; i < BluetoothConnector.BLUETOOTH_CONNECTIONS.size(); i++)
+        {
+            if(IsConnected(BluetoothConnector.BLUETOOTH_CONNECTIONS.get(i)))
+            {
+                SetColorTint(BluetoothConnector.STATUS_BUTTONS.get(i), SUCCESS_COLOR);
+            }
+            else
+            {
+                SetColorTint(BluetoothConnector.STATUS_BUTTONS.get(i), FAIL_COLOR);
+            }
+        }
+
+        if(IsConnected(BluetoothConnector.BLUETOOTH_CONNECTIONS))
+        {
+            HideAllMenus();
+            SetVisible(findViewById(R.id.start_activity));
         }
     }
 
+
     //function that is called when the disconnect button is clicked
     public void DisconnectClick(View window) {
-        //cancel the bluetooth connection to make it null
-        if (!(bluetoothConnection == null)) {
-            bluetoothConnection.cancel();
-        }
-        bluetoothConnection = null;
+
+        DisconnectConnections(BluetoothConnector.BLUETOOTH_CONNECTIONS);
         ShowToast("Disconnected....");
     }
 
@@ -402,12 +534,13 @@ public class MainActivity extends AppCompatActivity
 
         if (seperated_name.length == 4) {
 
-            if (bluetoothConnection.sender != null) {
-                ShowToast("Sending....");
-                bluetoothConnection.run("[" + command.ordinal() + "," + converter.GetJsonString(temp_activity) + "]");
-            } else {
-
-                ShowToast("Not connnected....");
+            if(SendMessage(BluetoothConnector.BLUETOOTH_CONNECTIONS, "[" + command.ordinal() + "," + converter.GetJsonString(temp_activity) + "]"))
+            {
+                ShowToast("Message Sent...");
+            }
+            else
+            {
+                ShowToast("Message failed to send...");
             }
 
         } else {
@@ -417,32 +550,33 @@ public class MainActivity extends AppCompatActivity
 
     private void SendIntroduction()
     {
-
-        if (bluetoothConnection.sender != null) {
-            ShowToast("Sending....");
-            bluetoothConnection.run("[0]");
-        } else {
-            ShowToast("Not connnected....");
+        if(SendMessage(BluetoothConnector.BLUETOOTH_CONNECTIONS, "[0]"))
+        {
+            ShowToast("Message Sent...");
+        }
+        else
+        {
+            ShowToast("Message failed to send...");
         }
     }
 
     private void SendGoodbye()
     {
-        if (bluetoothConnection.sender != null) {
-            ShowToast("Sending....");
-            bluetoothConnection.run("[3]");
-        } else {
-            ShowToast("Not connnected....");
+        if(SendMessage(BluetoothConnector.BLUETOOTH_CONNECTIONS, "[3]"))
+        {
+            ShowToast("Message Sent...");
+        }
+        else
+        {
+            ShowToast("Message failed to send...");
         }
     }
 
     public void StartTest(View view)
     {
-        if (bluetoothConnection.sender != null) {
-            bluetoothConnection.run("[" + AtecCommand.StartTest.ordinal() + "]");
-
-        } else {
-            ShowToast("Not connnected....");
+        if(!SendMessage(BluetoothConnector.BLUETOOTH_CONNECTIONS, "[" + AtecCommand.StartTest.ordinal() + "]"))
+        {
+            ShowToast("Message failed to send...");
         }
 
         HideAllMenus();
@@ -488,11 +622,9 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.continue_test).setVisibility(View.INVISIBLE);
         findViewById(R.id.end_test).setVisibility(View.INVISIBLE);
 
-        if (bluetoothConnection.sender != null) {
-
-            bluetoothConnection.run("[" + AtecCommand.EndTest.ordinal() + "]");
-        } else {
-            ShowToast("Not connnected....");
+        if(!SendMessage(BluetoothConnector.BLUETOOTH_CONNECTIONS, "[" + AtecCommand.EndTest.ordinal() + "]"))
+        {
+            ShowToast("Message failed to send...");
         }
     }
 
@@ -590,7 +722,7 @@ public class MainActivity extends AppCompatActivity
             Button new_button = new Button(this);
             new_button.setText(exercise_names.get(index + "_" + i));
             new_button.setTag("middle_" + index + "_" + i);
-            
+
             new_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     OptionClick(v);
@@ -702,6 +834,10 @@ public class MainActivity extends AppCompatActivity
         view.setVisibility(View.INVISIBLE);
     }
 
+    public void SetColorTint(View view, ColorStateList color)
+    {
+        view.setBackgroundTintList(color);
+    }
 
     public enum ActivityType {
         Introduction,

@@ -58,7 +58,12 @@ public class BluetoothThread extends Thread {
         mmSocket = tmp;
     }
 
-    public void run(String message) {
+    public boolean IsConnected()
+    {
+        return mmSocket.isConnected();
+    }
+
+    public void Send(String message) {
         // Cancel discovery because it otherwise slows down the connection.
         bluetooth.cancelDiscovery();
 

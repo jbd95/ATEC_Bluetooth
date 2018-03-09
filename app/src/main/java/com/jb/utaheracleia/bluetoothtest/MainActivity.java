@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity
         Thread t = new Thread(BluetoothConnector);
         t.start();
 
+
     }
 
     /*Implements functionality for the back button*/
@@ -327,30 +328,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private boolean ConnectIfNecessary(ArrayList<BluetoothThread> threads)
-    {
-        for(int i = 0; i < threads.size(); i++)
-        {
-            if (!IsConnected(threads.get(i))) {
-                threads.set(i, new BluetoothThread(bluetooth, COMPUTER_NAMES.get(i), SERVER_UUID));
-                threads.get(i).Send("");
-            }
-        }
-        if(IsConnected(threads))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    private void SetupConnections()
-    {
-        for(int i = 0; i < COMPUTER_NAMES.size(); i++){
-            BluetoothThread bluetooth_thread = new BluetoothThread(bluetooth, COMPUTER_NAMES.get(i), SERVER_UUID);
-            BluetoothConnector.BLUETOOTH_CONNECTIONS.add(bluetooth_thread);
-        }
-    }
-
     private boolean SendMessage(ArrayList<BluetoothThread> threads, String message)
     {
         for(int i = 0; i < threads.size(); i++)
@@ -373,6 +350,7 @@ public class MainActivity extends AppCompatActivity
         {
             threads.get(i).cancel();
             threads.set(i, null);
+            SetColorTint(BluetoothConnector.STATUS_BUTTONS.get(i), FAIL_COLOR);
         }
         if(!IsConnected(threads))
         {
@@ -657,7 +635,7 @@ public class MainActivity extends AppCompatActivity
 
     private void CreateMainMenu(int num_options, ConstraintLayout parent_layout)
     {
-        LinearLayout layout = new LinearLayout(this);
+        /*LinearLayout layout = new LinearLayout(this);
 
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setVerticalGravity(Gravity.CENTER);
@@ -705,40 +683,91 @@ public class MainActivity extends AppCompatActivity
         parent_layout.addView(layout);
 
         HideAllMenus();
+        Last_Visited = new ArrayList<>();*/
+
+        View view = LayoutInflater.from(this).inflate(R.layout.exercise_category_menu, null);
+
+        for(int i = 1; i <= num_options; i++) {
+            ConstraintLayout new_button_container = (ConstraintLayout) LayoutInflater.from(this).inflate(R.layout.exercise_category_button, null);
+
+            ((Button)new_button_container.findViewById(R.id.category_button)).setText(main_menu_button_text[i - 1]);
+            ((Button)new_button_container.findViewById(R.id.category_button)).setTag(i + "");
+
+
+            ((LinearLayout)view.findViewById(R.id.category_container)).addView(new_button_container);
+
+
+            if(i != 0 || i != num_options) {
+                ((Button)new_button_container.findViewById(R.id.category_button)).setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        ExerciseClick(v);
+                    }
+                });
+            }
+            else
+            {
+                if(i == 0)
+                {
+                    ((Button)new_button_container.findViewById(R.id.category_button)).setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            SendIntroduction();
+                        }
+                    });
+                }
+                else
+                {
+                    ((Button)new_button_container.findViewById(R.id.category_button)).setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            SendGoodbye();
+                        }
+                    });
+                }
+            }
+
+            CreateSubMenu(exercise_options[i - 1], parent_layout, i);
+        }
+
+        parent_layout.addView(view);
+        view.setTag("first_menu");
+
+        ConstraintSet set = new ConstraintSet();
+        set.clone(parent_layout);
+        set.centerHorizontally(view.getId(), parent_layout.getId());
+        set.applyTo(parent_layout);
+
+        HideAllMenus();
         Last_Visited = new ArrayList<>();
 
     }
     private void CreateSubMenu(int num_options, ConstraintLayout parent_layout, int index)
     {
-        LinearLayout layout = new LinearLayout(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.exercise_sub_menu, null);
 
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setVerticalGravity(Gravity.CENTER);
-
+        view.setTag("sub_menu_" + index);
 
         for(int i = 1; i <= num_options; i++) {
 
 
-            Button new_button = new Button(this);
-            new_button.setText(exercise_names.get(index + "_" + i));
-            new_button.setTag("middle_" + index + "_" + i);
+            ConstraintLayout new_button_container = (ConstraintLayout) LayoutInflater.from(this).inflate(R.layout.exercise_sub_menu_button, null);
 
-            new_button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    OptionClick(v);
-                }
-            });
+            ((Button)new_button_container.findViewById(R.id.option_button)).setTag("middle_" + index + "_" + i);
+            ((Button)new_button_container.findViewById(R.id.option_button)).setText(exercise_names.get(index + "_" + i));
 
+            ((LinearLayout)view.findViewById(R.id.container)).addView(new_button_container);
 
-            layout.addView(new_button);
 
             CreateFinalMenu(ACTIVITY_TYPE_COUNT, parent_layout, index, i);
         }
 
-        layout.setTag("sub_menu_" + index);
-        parent_layout.addView(layout);
+        parent_layout.addView(view);
 
-        SetInvisible(layout);
+        ConstraintSet set = new ConstraintSet();
+        set.clone(parent_layout);
+        set.centerHorizontally(view.getId(), parent_layout.getId());
+        set.applyTo(parent_layout);
+
+        SetInvisible(view);
+
     }
 
     public void ExerciseClick(View window) {
@@ -826,12 +855,31 @@ public class MainActivity extends AppCompatActivity
 
     public void SetVisible(View view) {
         view.setVisibility(View.VISIBLE);
-        Last_Visited.add(view);
-        Current_Menu_Showing = view;
+        if (view.getTag() != null) {
+            if (!view.getTag().toString().equalsIgnoreCase("omit")) {
+                Last_Visited.add(view);
+                Current_Menu_Showing = view;
+            }
+        }
+        else
+        {
+            Last_Visited.add(view);
+            Current_Menu_Showing = view;
+        }
     }
 
     public void SetInvisible(View view) {
-        view.setVisibility(View.INVISIBLE);
+
+
+        if (view.getTag() != null) {
+            if (!view.getTag().toString().equalsIgnoreCase("omit")) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
+        else
+        {
+            view.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void SetColorTint(View view, ColorStateList color)

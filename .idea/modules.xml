@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ATEC_Bluetooth.iml" filepath="$PROJECT_DIR$/ATEC_Bluetooth.iml" />
-      <module fileurl="file://D:\Developer Software\Github\ATEC_Bluetooth\BluetoothTest.iml" filepath="D:\Developer Software\Github\ATEC_Bluetooth\BluetoothTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -41,6 +41,7 @@ import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -78,9 +79,17 @@ public class MainActivity extends AppCompatActivity
     public ArrayList<View> Last_Visited = new ArrayList<>();
     Map<String, String> exercise_names = new HashMap<String, String>();
     Map<String, String> foot_options = new HashMap<String, String>();
+    ArrayList<String> Intro_Not_Included = new ArrayList<>();
+    ArrayList<String> Pratice_Included = new ArrayList<>();
 
-    public ColorStateList SUCCESS_COLOR = ColorStateList.valueOf(Color.GREEN);
-    public ColorStateList FAIL_COLOR = ColorStateList.valueOf(Color.RED);
+
+    ArrayList<View> Button_Indicators = new ArrayList<>();
+
+    int success_color = Color.parseColor("#32CD32");
+    int fail_color = Color.parseColor("#ffcc0000");
+
+    ColorStateList SUCCESS_COLOR = ColorStateList.valueOf(success_color);
+    ColorStateList FAIL_COLOR = ColorStateList.valueOf(fail_color);
 
     ColorStateList app_bar_color;
 
@@ -198,7 +207,21 @@ public class MainActivity extends AppCompatActivity
         foot_options.put("9_11", "851");
         foot_options.put("9_12", "852");
 
-        COMPUTER_NAMES.add("DESKTOP-S9K0QPK");
+        Intro_Not_Included.add("2_6");
+        Intro_Not_Included.add("4_2");
+        Intro_Not_Included.add("9_2");
+        Intro_Not_Included.add("9_4");
+        Intro_Not_Included.add("9_6");
+        Intro_Not_Included.add("9_8");
+        Intro_Not_Included.add("9_10");
+        Intro_Not_Included.add("9_12");
+
+        Pratice_Included.add("5_1");
+        Pratice_Included.add("5_3");
+        Pratice_Included.add("7_2");
+        Pratice_Included.add("7_3");
+
+        //COMPUTER_NAMES.add("DESKTOP-S9K0QPK");
         COMPUTER_NAMES.add("DESKTOP-9DF7A2");
 
         app_bar_color = findViewById(R.id.toolbar).getBackgroundTintList();
@@ -230,10 +253,14 @@ public class MainActivity extends AppCompatActivity
         /*bluetooth discovery drains battery and isn't necessary for the connection*/
         bluetooth.cancelDiscovery();
 
-        ArrayList<View> button_indicators = new ArrayList<>();
-        button_indicators.add(findViewById(R.id.connection_one));
-        button_indicators.add(findViewById(R.id.connection_two));
-        BluetoothConnector = new ManageConnections(COMPUTER_NAMES, button_indicators, bluetooth, SERVER_UUID);
+        for(int i = 0; i < COMPUTER_NAMES.size(); i++)
+        {
+            View view = LayoutInflater.from(this).inflate(R.layout.connection_button, null);
+            ((LinearLayout)findViewById(R.id.connection_button_list)).addView(view);
+            Button_Indicators.add(view.findViewById(R.id.connection_button));
+        }
+
+        BluetoothConnector = new ManageConnections(COMPUTER_NAMES, Button_Indicators, bluetooth, SERVER_UUID);
 
         Thread t = new Thread(BluetoothConnector);
         t.start();
@@ -354,6 +381,7 @@ public class MainActivity extends AppCompatActivity
         }
         if(!IsConnected(threads))
         {
+            ((ImageView)findViewById(R.id.status_bar)).setBackgroundTintList(FAIL_COLOR);
             return true;
         }
         return false;
@@ -362,57 +390,9 @@ public class MainActivity extends AppCompatActivity
     /*function that gets called when the connect button is clicked*/
     public void ConnectClick(View window) throws InterruptedException{
 
-        //connect bluetooth if there is no connection yet
-        /*if (bluetoothConnection == null) {
-            ShowToast("Connecting....");
-
-            //start a new bluetooth thread
-            bluetoothConnection = new BluetoothThread(bluetooth, DEVICE_NAME, SERVER_UUID);
-            //send a blank string to the bluetooth device to get everything set up
-            bluetoothConnection.run("");
-
-            //if the bluetooth connection was successful then show the next menu
-            if (bluetoothConnection.sender != null) {
-                ShowToast("Connected....");
-
-                HideAllMenus();
-                SetVisible(findViewById(R.id.start_activity));
-            } else {
-
-                ShowToast("Not connected....");
-            }
-            //bluetooth is already connected try and go to the next menu
-        } else {
-            if (bluetoothConnection.sender != null) {
-                ShowToast("Connected....");
-                HideAllMenus();
-                SetVisible(findViewById(R.id.start_activity));
-            } else {
-                bluetoothConnection = null;
-                ShowToast("Not connected....");
-            }
-        }*/
-
-        /*if(bluetoothConnection.size() == 0)
-        {
-            SetupConnections();
-            ShowToast("setting up connections");
-        }
-
-       ConnectIfNecessary(bluetoothConnection);
-
-        if(IsConnected(bluetoothConnection))
-        {
-            ShowToast("Connected....");
-            HideAllMenus();
-            SetVisible(findViewById(R.id.start_activity));
-        }
-        else
-        {
-            ShowToast("Not connected...");
-        }*/
         for(int i = 0; i < BluetoothConnector.BLUETOOTH_CONNECTIONS.size(); i++)
         {
+
             if(IsConnected(BluetoothConnector.BLUETOOTH_CONNECTIONS.get(i)))
             {
                 SetColorTint(BluetoothConnector.STATUS_BUTTONS.get(i), SUCCESS_COLOR);
@@ -425,17 +405,25 @@ public class MainActivity extends AppCompatActivity
 
         if(IsConnected(BluetoothConnector.BLUETOOTH_CONNECTIONS))
         {
+            ((ImageView)findViewById(R.id.status_bar)).setBackgroundTintList(SUCCESS_COLOR);
             HideAllMenus();
             SetVisible(findViewById(R.id.start_activity));
         }
+        else
+        {
+            SetColorTint(findViewById(R.id.status_bar), FAIL_COLOR);
+        }
     }
 
+    public void CollapseUIItem(View view)
+    {
+        view.setVisibility(View.GONE);
+    }
 
     //function that is called when the disconnect button is clicked
     public void DisconnectClick(View window) {
 
         DisconnectConnections(BluetoothConnector.BLUETOOTH_CONNECTIONS);
-        ShowToast("Disconnected....");
     }
 
     public void ShowToast(String to_show) {
@@ -476,23 +464,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        if((Integer.parseInt(seperated_name[3]) - 1) == ActivityType.Test.ordinal())
-        {
-            ChangeAppBarColor(window.getBackgroundTintList());
 
-        }
-        else if((Integer.parseInt(seperated_name[3]) - 1) == ActivityType.Stop.ordinal())
-        {
-            ChangeAppBarColor(window.getBackgroundTintList());
-        }
-        else if((Integer.parseInt(seperated_name[3]) - 1) == ActivityType.Introduction.ordinal())
-        {
-            ChangeAppBarColor(window.getBackgroundTintList());
-        }
-        else
-        {
-            ChangeAppBarColor(window.getBackgroundTintList());
-        }
         converter.SetDate(temp_activity);
 
         AtecCommand command = AtecCommand.StartActivity;
@@ -514,13 +486,23 @@ public class MainActivity extends AppCompatActivity
 
             if(SendMessage(BluetoothConnector.BLUETOOTH_CONNECTIONS, "[" + command.ordinal() + "," + converter.GetJsonString(temp_activity) + "]"))
             {
-                ShowToast("Message Sent...");
-            }
-            else
-            {
-                ShowToast("Message failed to send...");
-            }
+                ResetBluetoothIndicator();
+                for(int i = 0; i < BluetoothConnector.BLUETOOTH_CONNECTIONS.size(); i++)
+                {
 
+                    if(IsConnected(BluetoothConnector.BLUETOOTH_CONNECTIONS.get(i)))
+                    {
+                        SetColorTint(BluetoothConnector.STATUS_BUTTONS.get(i), window.getBackgroundTintList());
+                    }
+                    else
+                    {
+                        SetColorTint(BluetoothConnector.STATUS_BUTTONS.get(i), window.getBackgroundTintList());
+
+                    }
+                }
+                ((ImageView)findViewById(R.id.status_bar)).setBackgroundTintList(window.getBackgroundTintList());
+
+            }
         } else {
             ShowToast("An error occurred when reading the button's tag....");
         }
@@ -575,6 +557,7 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.start_test).setVisibility(View.INVISIBLE);
         findViewById(R.id.continue_test).setVisibility(View.VISIBLE);
         findViewById(R.id.end_test).setVisibility(View.VISIBLE);
+
     }
 
     public void ContinueTest(View view)
@@ -761,10 +744,15 @@ public class MainActivity extends AppCompatActivity
 
         parent_layout.addView(view);
 
-        ConstraintSet set = new ConstraintSet();
+        /*ConstraintSet set = new ConstraintSet();
         set.clone(parent_layout);
-        set.centerHorizontally(view.getId(), parent_layout.getId());
-        set.applyTo(parent_layout);
+        //set.centerHorizontally(view.getId(), parent_layout.getId());
+        //set.connect(view.getId(), ConstraintSet.TOP, parent_layout.getId(), ConstraintSet.TOP);
+        //set.connect(view.getId(), ConstraintSet.BOTTOM, parent_layout.getId(), ConstraintSet.BOTTOM);
+       // set.centerVertically(view.getId(), parent_layout.getId());
+
+        set.applyTo(parent_layout);*/
+
 
         SetInvisible(view);
 
@@ -837,12 +825,20 @@ public class MainActivity extends AppCompatActivity
         parent_layout.addView(view);
 
 
+        if(Intro_Not_Included.contains(upper_index + "_" + middle_index))
+        {
+            view.findViewById(R.id.intro).setVisibility(View.GONE);
+        }
+        if(Pratice_Included.contains(upper_index + "_" + middle_index))
+        {
+            view.findViewById(R.id.practice).setVisibility(View.VISIBLE);
+        }
 
        ConstraintSet set = new ConstraintSet();
        set.clone(parent_layout);
        set.centerHorizontally(view.getId(), parent_layout.getId());
+       set.centerVertically(view.getId(), parent_layout.getId());
        set.applyTo(parent_layout);
-
 
         SetInvisible(view);
     }
@@ -865,6 +861,57 @@ public class MainActivity extends AppCompatActivity
         {
             Last_Visited.add(view);
             Current_Menu_Showing = view;
+        }
+
+        ResetBluetoothIndicator();
+        if (view.getTag() != null) {
+            if (view.getTag().toString().equalsIgnoreCase("first_menu")) {
+
+                CollapseBluetoothIndicator();
+                CollapseUIItem(findViewById(R.id.connection_label));
+                ((TextView)(findViewById(R.id.connection_label))).setText("Connection Status");
+            }
+            else if (view.getTag().toString().contains("sub_menu")) {
+                CollapseBluetoothIndicator();
+                CollapseUIItem(findViewById(R.id.connection_label));
+                ((TextView)(findViewById(R.id.connection_label))).setText("Connection Status");
+            }
+            else if(view.getTag().toString().contains("final_menu"))
+            {
+                CollapseBluetoothIndicator();
+                CollapseUIItem(findViewById(R.id.connection_label));
+                (findViewById(R.id.status_bar)).setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                ((TextView)(findViewById(R.id.connection_label))).setText("Activity Status");
+            }
+        }
+    }
+
+    public void ResetBluetoothIndicator() {
+        for (View current : Button_Indicators) {
+            current.setVisibility(View.VISIBLE);
+        }
+        (findViewById(R.id.connection_label)).setVisibility(View.VISIBLE);
+
+        if (BluetoothConnector != null) {
+            for (int i = 0; i < BluetoothConnector.BLUETOOTH_CONNECTIONS.size(); i++) {
+                if (IsConnected(BluetoothConnector.BLUETOOTH_CONNECTIONS.get(i))) {
+                    SetColorTint(Button_Indicators.get(i), SUCCESS_COLOR);
+                } else {
+                    SetColorTint(Button_Indicators.get(i), FAIL_COLOR);
+                }
+            }
+            if (IsConnected(BluetoothConnector.BLUETOOTH_CONNECTIONS)) {
+                (findViewById(R.id.status_bar)).setBackgroundTintList(SUCCESS_COLOR);
+            } else {
+                (findViewById(R.id.status_bar)).setBackgroundTintList(FAIL_COLOR);
+            }
+        }
+    }
+    public void CollapseBluetoothIndicator()
+    {
+        for(View current : Button_Indicators)
+        {
+            CollapseUIItem(current);
         }
     }
 
@@ -905,5 +952,21 @@ public class MainActivity extends AppCompatActivity
         EndTest,
         StartActivity,
         EndActivity
+    }
+
+    public class IncludedCommands
+    {
+        public boolean IncludeIntro;
+        public boolean IncludePractice;
+        public boolean IncludeTest;
+        public boolean IncludeStop;
+
+        public IncludedCommands()
+        {
+            IncludeIntro = true;
+            IncludePractice = true;
+            IncludeTest = true;
+            IncludeStop = true;
+        }
     }
 }

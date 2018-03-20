@@ -44,11 +44,16 @@ public class ManageConnections implements Runnable {
     {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
+        while(!bluetooth.isEnabled())
+        {
+            SystemClock.sleep(1000);
+        }
+
         SetupConnections();
 
         ConnectIfNecessary(BLUETOOTH_CONNECTIONS);
 
-        SystemClock.sleep(3000);
+        SystemClock.sleep(1000);
 
         while(IsRunning)
         {

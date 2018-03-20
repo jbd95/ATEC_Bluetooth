@@ -15,17 +15,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/background_light"
+        android:padding="0dp"
         android:tag="omit"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
+        <LinearLayout
+            android:id="@+id/connection_button_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/connection_label">
+
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/connection_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:layout_weight="1"
             android:elegantTextHeight="true"
             android:text="Connection Status"
             android:textAlignment="center"
@@ -35,36 +48,24 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/status_bar" />
 
-        <ImageButton
-            android:id="@+id/connection_one"
-            android:layout_width="58dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@android:color/holo_red_dark"
-            app:layout_constraintHorizontal_bias="0.3"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:srcCompat="@android:drawable/stat_sys_data_bluetooth" />
-
-        <ImageButton
-            android:id="@+id/connection_two"
-            android:layout_width="58dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@android:color/holo_red_dark"
-            app:layout_constraintHorizontal_bias="0.7"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:srcCompat="@android:drawable/stat_sys_data_bluetooth" />
+        <Button
+            android:id="@+id/indicator_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:backgroundTint="@android:color/background_light"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/status_bar"
-            android:layout_width="392dp"
-            android:layout_height="25dp"
-            app:srcCompat="@android:color/holo_red_dark"
-            tools:layout_editor_absoluteX="0dp"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:background="@android:color/holo_red_dark"
+            app:layout_constraintLeft_toLeftOf="@+id/indicator_background"
+            app:layout_constraintRight_toRightOf="@+id/indicator_background"
             tools:layout_editor_absoluteY="0dp" />
 
     </android.support.constraint.ConstraintLayout>
@@ -215,7 +216,9 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="100dp">
 
         <Button
             android:id="@+id/Connect"

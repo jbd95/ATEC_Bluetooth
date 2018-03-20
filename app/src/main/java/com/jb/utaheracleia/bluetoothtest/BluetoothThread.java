@@ -60,17 +60,21 @@ public class BluetoothThread extends Thread {
 
     public boolean IsConnected()
     {
+        if(mmSocket == null)
+        {
+            return false;
+        }
         return mmSocket.isConnected();
     }
 
-    public void Send(String message) {
+    public boolean Send(String message) {
         // Cancel discovery because it otherwise slows down the connection.
         bluetooth.cancelDiscovery();
 
         if(mmSocket.isConnected())
         {
             sender = new BluetoothSend(mmSocket, message);
-            return;
+            return true;
 
         }
 
@@ -86,7 +90,7 @@ public class BluetoothThread extends Thread {
             } catch (IOException closeException) {
                 Log.e("bluetoothmsg", "Could not close the client socket", closeException);
             }
-            return;
+            return false;
         }
 
         // The connection attempt succeeded. Perform work associated with
@@ -94,9 +98,8 @@ public class BluetoothThread extends Thread {
 
         sender = new BluetoothSend(mmSocket, message);
 
-
-
         Log.d("bluetoothmsg", "success");
+        return true;
     }
 
     // Closes the client socket and causes the thread to finish.
